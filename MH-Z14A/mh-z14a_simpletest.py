@@ -23,5 +23,5 @@ if __name__ == "__main__":
     # other Pi versions might need CO2Sensor("/dev/ttyAMA0")
     sensor = MHZ14A()
     while True:
-        print("{}: CO2: {} ppa".format(time.asctime(time.localtime(time.time())), sensor.get_co2level()))
+        print("{}: CO2: {} ppm".format(time.asctime(time.localtime(time.time())), sensor.get_co2level()))
         time.sleep(10)
