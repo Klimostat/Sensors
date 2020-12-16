@@ -18,18 +18,10 @@ class MHZ14A:
             return (response[2] << 8) | response[3]
         return -1
 
-    def get_temperature(self):
-        self.serial.write(bytearray(self.request))
-        response = self.serial.read(9)
-        if len(response) == 9:
-            return response[4]
-        return -1
-
 
 if __name__ == "__main__":
     # other Pi versions might need CO2Sensor("/dev/ttyAMA0")
     sensor = MHZ14A()
-    co2level = sensor.get_co2level()
-    temperature = sensor.get_temperature()
-    print("{}: CO2: {} ppa    Temperature: {} C ".format(time.asctime(time.localtime(time.time())), co2level,
-                                                         temperature))
+    while True:
+        print("{}: CO2: {} ppa".format(time.asctime(time.localtime(time.time())), sensor.get_co2level()))
+        time.sleep(10)
