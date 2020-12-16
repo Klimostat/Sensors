@@ -2,7 +2,7 @@ import serial
 import time
 
 
-class CO2Sensor:
+class MHZ14A:
     request = [0xff, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
 
     def __init__(self, port="/dev/ttyS0"):
@@ -11,16 +11,25 @@ class CO2Sensor:
             timeout=1
         )
 
-    def get(self):
+    def get_co2level(self):
         self.serial.write(bytearray(self.request))
         response = self.serial.read(9)
         if len(response) == 9:
-            current_time = time.strftime("%H:%M:%S", time.localtime())
-            return {"time": current_time, "ppa": (response[2] << 8) | response[3], "temp": response[4]}
+            return (response[2] << 8) | response[3]
+        return -1
+
+    def get_temperature(self):
+        self.serial.write(bytearray(self.request))
+        response = self.serial.read(9)
+        if len(response) == 9:
+            return response[4]
         return -1
 
 
 if __name__ == "__main__":
     # other Pi versions might need CO2Sensor("/dev/ttyAMA0")
-    sensor = CO2Sensor()
-    print(sensor.get())
+    sensor = MHZ14A()
+    co2level = sensor.get_co2level()
+    temperature = sensor.get_temperature()
+    print("{}: CO2: {} ppa    Temperature: {} C ".format(time.asctime(time.localtime(time.time())), co2level,
+                                                         temperature))
