@@ -8,20 +8,22 @@ class DHT11:
         self.dhtDevice = adafruit_dht.DHT11(port, use_pulseio=False)
 
     def get_temperature(self):
-        while True:
+        t = None
+        while t is None:
             try:
-                temperature = self.dhtDevice.temperature
-                return temperature
-            except Exception:
+                t = self.dhtDevice.temperature
+            except:
                 continue
+        return t
 
     def get_humidity(self):
-        while True:
+        h = None
+        while h is None:
             try:
-                humidity = self.dhtDevice.humidity
-                return humidity
-            except Exception:
+                h = self.dhtDevice.humidity
+            except:
                 continue
+        return h
 
 
 if __name__ == "__main__":
