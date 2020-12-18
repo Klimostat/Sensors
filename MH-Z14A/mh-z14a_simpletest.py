@@ -13,9 +13,11 @@ class MHZ14A:
 
     def get_co2level(self):
         self.serial.write(bytearray(self.request))
-        response = self.serial.read(9)
-        if len(response) == 9:
-            return (response[2] << 8) | response[3]
+        res = self.serial.read(9)
+        if len(res) == 9:
+            checksum = 0xff & (~(res[1] + res[2] + res[3] + res[4] + res[5] + res[6] + res[7]) + 1)
+            if res[8] == checksum:
+                return (res[2] << 8) | res[3]
         return -1
 
 
