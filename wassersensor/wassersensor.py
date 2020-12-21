@@ -5,13 +5,17 @@ class WaterLevelSensor:
 
     GPIO.setmode(GPIO.BOARD)
 
-    def __init__(self,IOport = 20):
-        self.waterSensorIn = GPIO.setup(IOport, GPIO.IN)
-
-
+    def __init__(self,ioport = 20):
+        self.waterSensorIn = GPIO.setup(ioport, GPIO.IN)
 
     def detect_water_ingress(self):
         while True:
-            if GPIO.input(20):
-                print("Waterlevel too high!!!")
+            if self.waterSensorIn.input(20):
+                print("Wateringress detected!!!")
+            else:
+                print("No Wateringress detected.")
             time.sleep(30)
+
+    if __name__ == "__main__":
+        while True:
+            detect_water_ingress()
