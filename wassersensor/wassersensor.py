@@ -1,21 +1,19 @@
 import time
 import RPi.GPIO as GPIO
 
+
 class WaterLevelSensor:
-
-    GPIO.setmode(GPIO.BOARD)
-
-    def __init__(self,ioport = 20):
-        self.waterSensorIn = GPIO.setup(ioport, GPIO.IN)
+    def __init__(self, ioport=20):
+        self.ioport = ioport
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(ioport, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     def detect_water_ingress(self):
-        while True:
-            if self.waterSensorIn.input(20):
-                print("Wateringress detected!!!")
-            else:
-                print("No Wateringress detected.")
-            time.sleep(30)
+        return GPIO.input(self.ioport) == GPIO.HIGH
 
-    if __name__ == "__main__":
-        while True:
-            detect_water_ingress()
+
+if __name__ == "__main__":
+    water = WaterLevelSensor()
+    while True:
+        print(water.detect_water_ingress())
+        time.sleep(1)
