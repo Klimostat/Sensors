@@ -45,7 +45,7 @@ def get_sensor_data():
     conn.commit()
     conn.close()
 
-    return "{}: Temp: {:.1f} C    Humidity: {}%    CO2: {} ppm    Waterimgress: {}".format(
+    return "{}: Temp: {:.1f} C    Humidity: {}%    CO2: {} ppm    Wateringress: {}".format(
         time.asctime(time.localtime(time.time())),
         temperature, humidity, co2level, water_ingress)
 
