@@ -9,7 +9,7 @@ import sys
 def insert_data(cursor, value, sensor, timestamp):
     cursor.execute(
         "INSERT INTO messung (messzeitpunkt, messdaten, fk_sensorId) VALUES (%s, %s, %s)",
-        (timestamp, value, sensor))
+        (time.strftime("%Y-%m-%d %H:%M:%S", timestamp), value, sensor))
 
 
 def get_sensor_data():
@@ -22,7 +22,7 @@ def get_sensor_data():
     co2level = mhz14a.get_co2level()
     water_ingress = waterlevelsensor.detect_water_ingress()
 
-    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = time.localtime()
 
     try:
         conn = mariadb.connect(
@@ -46,7 +46,7 @@ def get_sensor_data():
     conn.close()
 
     return "{}: Temp: {:.1f} C    Humidity: {}%    CO2: {} ppm    Wateringress: {}".format(
-        time.asctime(time.localtime(time.time())),
+        time.asctime(timestamp),
         temperature, humidity, co2level, water_ingress)
 
 
