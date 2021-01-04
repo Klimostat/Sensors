@@ -3,10 +3,10 @@ import RPi.GPIO as GPIO
 
 
 class WaterLevelSensor:
-    def __init__(self, ioport=20):
-        self.ioport = ioport
+    def __init__(self, port=20):
+        self.ioport = port
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(ioport, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(port, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     def detect_water_ingress(self):
         return GPIO.input(self.ioport) == GPIO.HIGH
