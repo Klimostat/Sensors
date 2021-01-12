@@ -40,7 +40,8 @@ def get_sensor_data():
 
     insert_data(cur, str(temperature), "1", timestamp)
     insert_data(cur, str(humidity), "2", timestamp)
-    insert_data(cur, str(co2level), "3", timestamp)
+    if co2level != -1:
+        insert_data(cur, str(co2level), "3", timestamp)
     insert_data(cur, "1" if water_ingress else "0", "4", timestamp)
     conn.commit()
     conn.close()
