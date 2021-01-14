@@ -1,15 +1,16 @@
 from DHT11.dht11 import DHT11
 from MHZ14A.mhz14a import MHZ14A
 from Wassersensor.waterlevelsensor import WaterLevelSensor
+from datetime import datetime
 import time
 import mariadb
 import sys
 
 
-def insert_data(cursor, value, sensor, timestamp):
+def insert_data(cursor, value, sensor, timetuple):
     cursor.execute(
         "INSERT INTO messung (messzeitpunkt, messdaten, fk_sensorId) VALUES (%s, %s, %s)",
-        (time.strftime("%Y-%m-%d %H:%M:%S", timestamp), value, sensor))
+        (time.strftime("%Y-%m-%d %H:%M:%S", timetuple), value, sensor))
 
 
 def get_sensor_data():
@@ -22,7 +23,8 @@ def get_sensor_data():
     co2level = mhz14a.get_co2level()
     water_ingress = waterlevelsensor.detect_water_ingress()
 
-    timestamp = time.localtime()
+    # timetuple = time.localtime()
+    timetuple = datetime.utcnow().timetuple()
 
     try:
         conn = mariadb.connect(
@@ -38,16 +40,16 @@ def get_sensor_data():
 
     cur = conn.cursor()
 
-    insert_data(cur, str(temperature), "1", timestamp)
-    insert_data(cur, str(humidity), "2", timestamp)
+    insert_data(cur, str(temperature), "1", timetuple)
+    insert_data(cur, str(humidity), "2", timetuple)
     if 200 < co2level < 5000:
-        insert_data(cur, str(co2level), "3", timestamp)
-    insert_data(cur, "1" if water_ingress else "0", "4", timestamp)
+        insert_data(cur, str(co2level), "3", timetuple)
+    insert_data(cur, "1" if water_ingress else "0", "4", timetuple)
     conn.commit()
     conn.close()
 
     return "{}: Temp: {:.1f} C    Humidity: {}%    CO2: {} ppm    Wateringress: {}".format(
-        time.asctime(timestamp),
+        time.asctime(timetuple),
         temperature, humidity, co2level, water_ingress)
 
 
