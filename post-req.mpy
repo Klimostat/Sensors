@@ -1,0 +1,19 @@
+import ujson
+import urequests
+import network
+
+
+wlan = network.WLAN(network.STA_IF)			# create station interface
+wlan.active(True)							# activate the interface
+wlan.isconnected()							# check if the station is connected to an AP
+wlan.connect('FlowNET', '')					# connect to an AP
+wlan.ifconfig()								# get the interface's IP/netmask/gw/DNS addresses
+
+
+json = {"id": 1,"sensors": {"eins": "value1", "zwei": "value2"}}
+
+url = "https://home.letusflow.at//post.php"
+headers = {"content-type": "application/x-www-form-urlencoded"}
+data="data="+ujson.dumps(json)
+
+urequests.post(url, headers=headers, data=data).text
