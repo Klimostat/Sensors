@@ -1,2 +1,2 @@
 # Sensors
-Liest Sensorwerte aus und überträgt diese in eine Datenbank
+Liest Sensorwerte per MicroPython aus und überträgt sie per HTTP POST auf den Server
