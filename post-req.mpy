@@ -1,14 +1,16 @@
 import ujson
-import urequests
+import upip
 import network
 
 
-wlan = network.WLAN(network.STA_IF)			# create station interface
-wlan.active(True)							# activate the interface
-wlan.isconnected()							# check if the station is connected to an AP
-wlan.connect('FlowNET', '')					# connect to an AP
-wlan.ifconfig()								# get the interface's IP/netmask/gw/DNS addresses
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.isconnected()
+wlan.connect("SSID", "PASSWD")
+wlan.ifconfig()
 
+upip.install("micropython-urequests")
+import urequests
 
 json = {"id": 1,"sensors": {"eins": "value1", "zwei": "value2"}}
 
