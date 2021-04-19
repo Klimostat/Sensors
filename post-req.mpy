@@ -14,7 +14,7 @@ import urequests
 
 json = {"id": 1,"sensors": {"eins": "value1", "zwei": "value2"}}
 
-url = "https://home.letusflow.at//post.php"
+url = "https://home.letusflow.at/post.php"
 headers = {"content-type": "application/x-www-form-urlencoded"}
 data="data="+ujson.dumps(json)
 
