@@ -1,0 +1,6 @@
+STATION_ID = 1
+TOKEN = "asdf"
+INTERVAL = 10
+
+WIFI_SSID = ""
+WIFI_PASSWD = ""
