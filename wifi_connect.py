@@ -6,7 +6,7 @@ def connect():
 	wlan = network.WLAN(network.STA_IF)
 
 	if wlan.isconnected():
-		print("Already connected")
+		print("WIFI Already connected")
 		return
 
 	wlan.active(True)
@@ -15,5 +15,5 @@ def connect():
 	while not wlan.isconnected():
 		time.sleep(0.5)
 
-	print("Connection successful")
+	print("WIFI Connection successful")
 	print(wlan.ifconfig())
