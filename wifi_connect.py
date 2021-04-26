@@ -1,7 +1,7 @@
 def connect():
 	import network
 	import time
-	import constants
+	import configurations
 
 	wlan = network.WLAN(network.STA_IF)
 
@@ -10,7 +10,7 @@ def connect():
 		return
 
 	wlan.active(True)
-	wlan.connect(constants.WIFI_SSID, constants.WIFI_PASSWD)
+	wlan.connect(configurations.WIFI_SSID, configurations.WIFI_PASSWD)
 
 	while not wlan.isconnected():
 		time.sleep(0.5)
