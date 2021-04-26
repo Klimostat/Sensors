@@ -35,12 +35,15 @@ class SCD30:
         self._i2c_addr = 0x61
         self.i2c = SoftI2C(scl=Pin(5), sda=Pin(4), freq=100000)
 
+        self._send_command(0x4600, 1, [5])  # Intervall auf 5 Sekunden
+
     def _send_command(self, command: int, num_response_words: int = 1, arguments: list = []):
         check_word(command, "command")
 
         raw_message = list(int(command).to_bytes(2, "big"))
         for argument in arguments:
             check_word(argument, "argument")
+            raw_message.extend(int(argument).to_bytes(2, "big"))
             raw_message.append(crc8(argument))
 
         self.i2c.writeto(self._i2c_addr, raw_message)
@@ -75,3 +78,15 @@ class SCD30:
             response.append(word)
 
         return response
+
+    def read_measurement(self):
+        data = self._send_command(0x0300, num_response_words=6)
+
+        if data is None or len(data) != 6:
+            return None
+
+        co2_ppm = (data[0] << 16) | data[1]
+        temp_celsius = (data[2] << 16) | data[3]
+        rh_percent = (data[4] << 16) | data[5]
+
+        return co2_ppm, temp_celsius, rh_percent
