@@ -1,5 +1,5 @@
 import time
-from machine import Pin, I2C
+from machine import Pin, SoftI2C
 
 
 def check_word(word: int, name: str = "value"):
@@ -33,7 +33,7 @@ def crc8(word: int):
 class SCD30:
     def __init__(self):
         self._i2c_addr = 0x61
-        self.i2c = I2C(1, scl=Pin(18), sda=Pin(19), freq=400000)
+        self.i2c = SoftI2C(scl=Pin(5), sda=Pin(4), freq=100000)
 
     def _send_command(self, command: int, num_response_words: int = 1, arguments: list = []):
         check_word(command, "command")
@@ -43,8 +43,7 @@ class SCD30:
             check_word(argument, "argument")
             raw_message.append(crc8(argument))
 
-        write_txn = self.i2c.writeto(self._i2c_addr, raw_message)
-        self._i2c.i2c_rdwr(write_txn)
+        self.i2c.writeto(self._i2c_addr, raw_message)
 
         # The interface description suggests a >3ms delay between writes and
         # reads for most commands.
