@@ -1,5 +1,5 @@
 import time
-from machine import Pin, SoftI2C
+from machine import Pin, I2C
 
 
 def check_word(word: int, name: str = "value"):
@@ -33,8 +33,7 @@ def crc8(word: int):
 class SCD30:
     def __init__(self):
         self._i2c_addr = 0x61
-        self.i2c = SoftI2C(scl=Pin(5), sda=Pin(4), freq=100000)
-        self.i2c.scan()  # scan for devices
+        self.i2c = I2C(1, scl=Pin(18), sda=Pin(19), freq=400000)
 
     def _send_command(self, command: int, num_response_words: int = 1, arguments: list = []):
         check_word(command, "command")
