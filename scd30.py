@@ -52,7 +52,7 @@ class SCD30:
         if num_response_words == 0:
             return []
 
-        read_txn = i2c.readfrom(self._i2c_addrm, num_response_words * 3)
+        read_txn = self.i2c.readfrom(self._i2c_addrm, num_response_words * 3)
 
         raw_response = list(read_txn)
 
