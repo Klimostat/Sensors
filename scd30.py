@@ -1,4 +1,4 @@
-import time
+import utime
 from machine import Pin, SoftI2C
 
 
@@ -47,7 +47,7 @@ class SCD30:
 
         # The interface description suggests a >3ms delay between writes and
         # reads for most commands.
-        time.sleep_ms(10)
+        utime.sleep_ms(10)
 
         if num_response_words == 0:
             return []
