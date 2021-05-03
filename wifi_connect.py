@@ -12,7 +12,9 @@ def connect():
 	wlan.active(True)
 	wlan.connect(configurations.WIFI_SSID, configurations.WIFI_PASSWD)
 
-	while not wlan.isconnected():
+	for _ in range(10):
+		if wlan.isconnected():
+			break
 		time.sleep(0.5)
 
 	print("WIFI Connection successful")
