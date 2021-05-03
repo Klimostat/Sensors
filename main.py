@@ -1,22 +1,26 @@
 import wifi_connect
+
 wifi_connect.connect()
 
-import time
+import utime
 import configurations
 import ujson
 import urequests
-from sdc30 import SDC30
-
+from machine import Pin, SoftI2C
+from scd30 import SCD30
 
 url = "https://home.letusflow.at/api/receive.php"
 headers = {"content-type": "application/x-www-form-urlencoded"}
 
-sdc = SDC30()
+i2c = SoftI2C(scl=Pin(22), sda=Pin(21))
+scd30 = SCD30(i2c, addr=0x61)
 
 while True:
-    last_time = time.time()
+    last_time = utime.time()
 
-    data = sdc.read_measurement()
+    while scd30.get_status_ready() != 1:
+        utime.sleep_ms(200)
+    scd30.read_measurement()
 
     data = "data=" + ujson.dumps({
         "id": configurations.STATION_ID,
@@ -27,6 +31,7 @@ while True:
             "rh": data[2]
         }
     })
+    print(data)
     print(urequests.post(url, headers=headers, data=data).text)
 
-    time.sleep(last_time + configurations.INTERVAL - time.time())
+    utime.sleep(last_time + configurations.INTERVAL - utime.time())
