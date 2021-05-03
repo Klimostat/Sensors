@@ -33,7 +33,7 @@ def crc8(word: int):
 class SCD30:
     def __init__(self):
         self._i2c_addr = 0x61
-        self.i2c = SoftI2C(scl=Pin(5), sda=Pin(4), freq=100000)
+        self.i2c = SoftI2C(scl=Pin(22), sda=Pin(21))
 
         self._send_command(0x4600, 1, [5])  # Intervall auf 5 Sekunden
 
@@ -46,14 +46,14 @@ class SCD30:
             raw_message.extend(int(argument).to_bytes(2, "big"))
             raw_message.append(crc8(argument))
 
-        self.i2c.writeto(self._i2c_addr, raw_message)
+        self.i2c.writeto(self._i2c_addr, bytearray(raw_message))
+
+        if num_response_words == 0:
+            return []
 
         # The interface description suggests a >3ms delay between writes and
         # reads for most commands.
         utime.sleep_ms(10)
-
-        if num_response_words == 0:
-            return []
 
         read_txn = self.i2c.readfrom(self._i2c_addr, num_response_words * 3)
 
@@ -66,11 +66,12 @@ class SCD30:
         # Data is returned as a sequence of num_response_words 2-byte words
         # (big-endian), each with a CRC-8 checksum:
         # [MSB0, LSB0, CRC0, MSB1, LSB1, CRC1, ...]
+        print(raw_response)
         response = []
         for i in range(num_response_words):
             # word_with_crc contains [MSB, LSB, CRC] for the i-th response word
             word_with_crc = raw_response[3 * i: 3 * i + 3]
-            word = int.from_bytes(word_with_crc[:2], "big")
+            word = int.from_bytes(bytearray(word_with_crc[:2]), "big")
             response_crc = word_with_crc[2]
             computed_crc = crc8(word)
             if response_crc != computed_crc:
@@ -84,6 +85,8 @@ class SCD30:
 
         if data is None or len(data) != 6:
             return None
+
+        print(data)
 
         co2_ppm = (data[0] << 16) | data[1]
         temp_celsius = (data[2] << 16) | data[3]
