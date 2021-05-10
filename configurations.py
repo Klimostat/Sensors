@@ -13,7 +13,7 @@ API_ENDPOINT = "https://home.letusflow.at/api/"
 
 
 def get_thresholds():
-    thresholds = uio.open("thresholds.json", "w")
+    thresholds = uio.open("thresholds.json", "r")
     json_data = ujson.load(thresholds)
     thresholds.close()
     return json_data
