@@ -1,6 +1,8 @@
 import wifi_connect
+import thresholds
 
 wifi_connect.connect()
+thresholds.update_thresholds()
 
 import utime
 import configurations
@@ -31,7 +33,12 @@ while True:
         "relh": relh
     })
     print(data)
-    print(urequests.post(url, headers=headers, data=data).text)
+    try:
+        thresholds_obj = ujson.loads(urequests.post(url, headers=headers, data=data).text)
+        thresholds.update_thresholds(thresholds_obj)
+    except ValueError:
+        # TODO: Serververbindung fehlgeschlagen
+        pass
 
     gc.collect()
     utime.sleep(last_time + configurations.INTERVAL - utime.time())
