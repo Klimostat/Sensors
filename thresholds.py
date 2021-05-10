@@ -21,3 +21,10 @@ def update_thresholds(json_data=None):
     thresholds = uio.open("thresholds.json", "w")
     ujson.dump(json_data, thresholds)
     thresholds.close()
+
+
+def get_thresholds():
+    thresholds_obj = uio.open("thresholds.json", "r")
+    json_data = ujson.load(thresholds_obj)
+    thresholds_obj.close()
+    return json_data
