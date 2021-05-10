@@ -18,9 +18,10 @@ def update_thresholds(json_data=None):
         })
         json_data = ujson.loads(urequests.post(url, headers=headers, data=data).text)
 
-    thresholds = uio.open("thresholds.json", "w")
-    ujson.dump(json_data, thresholds)
-    thresholds.close()
+    if not sorted(get_thresholds().items()) == sorted(json_data.items()):
+        thresholds_obj = uio.open("thresholds.json", "w")
+        ujson.dump(json_data, thresholds_obj)
+        thresholds_obj.close()
 
 
 def get_thresholds():
