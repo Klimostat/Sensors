@@ -6,6 +6,7 @@ import utime
 import configurations
 import ujson
 import urequests
+import gc
 from machine import Pin, SoftI2C
 from scd30 import SCD30
 
@@ -34,4 +35,5 @@ while True:
     print(data)
     print(urequests.post(url, headers=headers, data=data).text)
 
+    gc.collect()
     utime.sleep(last_time + configurations.INTERVAL - utime.time())
