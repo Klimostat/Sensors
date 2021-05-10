@@ -26,11 +26,9 @@ while True:
     data = "data=" + ujson.dumps({
         "id": configurations.STATION_ID,
         "token": configurations.TOKEN,
-        "measurements": {
-            "co2": co2,
-            "temp": temp,
-            "relh": relh
-        }
+        "co2": co2,
+        "temp": temp,
+        "relh": relh
     })
     print(data)
     print(urequests.post(url, headers=headers, data=data).text)
