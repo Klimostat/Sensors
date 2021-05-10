@@ -6,6 +6,9 @@ import configurations
 
 def update_thresholds(json_data=None):
     if json_data is None:
+        if not configurations.WLAN.isconnected():
+            return
+
         url = "{}getThresholds.php".format(configurations.API_ENDPOINT)
         headers = {"content-type": "application/x-www-form-urlencoded"}
 
