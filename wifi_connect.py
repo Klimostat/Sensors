@@ -1,21 +1,22 @@
+import network
+import time
+import configurations
+
+
 def connect():
-	import network
-	import time
-	import configurations
+    configurations.WLAN = network.WLAN(network.STA_IF)
 
-	wlan = network.WLAN(network.STA_IF)
+    if configurations.WLAN.isconnected():
+        print("WIFI Already connected")
+        return
 
-	if wlan.isconnected():
-		print("WIFI Already connected")
-		return
+    configurations.WLAN.active(True)
+    configurations.WLAN.connect(configurations.WIFI_SSID, configurations.WIFI_PASSWD)
 
-	wlan.active(True)
-	wlan.connect(configurations.WIFI_SSID, configurations.WIFI_PASSWD)
+    for _ in range(10):
+        if configurations.WLAN.isconnected():
+            break
+        time.sleep(0.5)
 
-	for _ in range(10):
-		if wlan.isconnected():
-			break
-		time.sleep(0.5)
-
-	print("WIFI Connection successful")
-	print(wlan.ifconfig())
+    print("WIFI Connection successful")
+    print(configurations.WLAN.ifconfig())

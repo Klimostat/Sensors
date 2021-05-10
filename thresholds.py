@@ -5,7 +5,7 @@ import configurations
 
 
 def update_thresholds():
-    url = "https://home.letusflow.at/api/getThresholds.php"
+    url = "{}getThresholds.php".format(configurations.API_ENDPOINT)
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
     data = "data=" + ujson.dumps({

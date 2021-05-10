@@ -9,7 +9,7 @@ import urequests
 from machine import Pin, SoftI2C
 from scd30 import SCD30
 
-url = "https://home.letusflow.at/api/receive.php"
+url = "{}receive.php".format(configurations.API_ENDPOINT)
 headers = {"content-type": "application/x-www-form-urlencoded"}
 
 i2c = SoftI2C(scl=Pin(22), sda=Pin(21))
@@ -20,15 +20,15 @@ while True:
 
     while scd30.get_status_ready() != 1:
         utime.sleep_ms(200)
-    scd30.read_measurement()
+    co2, temp, relh = scd30.read_measurement()
 
     data = "data=" + ujson.dumps({
         "id": configurations.STATION_ID,
         "token": configurations.TOKEN,
         "measurements": {
-            "co2": data[0],
-            "temp": data[1],
-            "rh": data[2]
+            "co2": co2,
+            "temp": temp,
+            "relh": relh
         }
     })
     print(data)
