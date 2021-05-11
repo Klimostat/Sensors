@@ -1,5 +1,5 @@
 import network
-import time
+import utime
 import configurations
 
 
@@ -7,7 +7,7 @@ def connect():
     configurations.WLAN = network.WLAN(network.STA_IF)
 
     if configurations.WLAN.isconnected():
-        print("WIFI Already connected")
+        print("{}: WIFI Already connected".format(utime.time()))
         return
 
     configurations.WLAN.active(True)
@@ -16,7 +16,7 @@ def connect():
     for _ in range(10):
         if configurations.WLAN.isconnected():
             break
-        time.sleep(0.5)
+        utime.sleep_ms(500)
 
-    print("WIFI Connection successful")
+    print("{}: WIFI Connection successful".format(utime.time()))
     print(configurations.WLAN.ifconfig())

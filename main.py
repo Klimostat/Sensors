@@ -25,6 +25,7 @@ def main():
 
         try:
             while scd30.get_status_ready() != 1:
+                print("{}: Sensor not ready".format(utime.time()))
                 utime.sleep_ms(2000)
             co2, temp, relh = scd30.read_measurement()
 
@@ -37,6 +38,7 @@ def main():
             })
             print(data)
             try:
+                print("{}: Sending data to server".format(utime.time()))
                 thresholds_obj = ujson.loads(urequests.post(url, headers=headers, data=data).text)
                 thresholds.update_thresholds(thresholds_obj)
             except ValueError:
@@ -46,7 +48,7 @@ def main():
             gc.collect()
             utime.sleep(last_time + configurations.INTERVAL - utime.time())
         except OSError as err:
-            print("An error occurred: {}".format(uerrno.errorcode[err.args[0]]))
+            print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
 
 
 if __name__ == "__main__":
