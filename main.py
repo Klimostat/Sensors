@@ -14,7 +14,6 @@ def main():
     wifi_connect.connect()
     thresholds.update_thresholds()
 
-    url = "{}receive.php".format(configurations.API_ENDPOINT)
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
     i2c = SoftI2C(scl=Pin(22), sda=Pin(21))
@@ -26,9 +25,21 @@ def main():
         try:
             while scd30.get_status_ready() != 1:
                 print("{}: Sensor not ready".format(utime.time()))
-                utime.sleep_ms(2000)
+
+                url = "{}ping.php".format(configurations.API_ENDPOINT)
+                data = "data=" + ujson.dumps({
+                    "id": configurations.STATION_ID,
+                    "token": configurations.TOKEN,
+                    "msg": "sensor_not_ready"
+                })
+
+                urequests.post(url, headers=headers, data=data)
+                gc.collect()
+                utime.sleep(8)
+
             co2, temp, relh = scd30.read_measurement()
 
+            url = "{}receive.php".format(configurations.API_ENDPOINT)
             data = "data=" + ujson.dumps({
                 "id": configurations.STATION_ID,
                 "token": configurations.TOKEN,
