@@ -23,7 +23,7 @@ def main():
         last_time = utime.time()
 
         while scd30.get_status_ready() != 1:
-            utime.sleep_ms(200)
+            utime.sleep_ms(2000)
         co2, temp, relh = scd30.read_measurement()
 
         data = "data=" + ujson.dumps({
