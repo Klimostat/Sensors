@@ -20,8 +20,13 @@ def main():
     scd30 = SCD30(i2c, addr=0x61)
 
     while True:
+        while True:
+            try:
+                if not scd30.get_status_ready() != 1:
+                    break
+            except OSError as err:
+                print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
 
-        while scd30.get_status_ready() != 1:
             print("{}: Sensor not ready".format(utime.time()))
 
             url = "{}ping.php".format(configurations.API_ENDPOINT)
