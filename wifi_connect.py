@@ -22,6 +22,7 @@ def connect():
     if configurations.WLAN.isconnected():
         print("{}: WIFI Connection successful".format(utime.time()))
         print(configurations.WLAN.ifconfig())
+        led_handle.srv_led_off()
     else:
         print("{}: WIFI Connection could not be formed".format(utime.time()))
         led_handle.srv_led_off()

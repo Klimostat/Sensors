@@ -3,6 +3,8 @@ import ujson
 import uio
 import utime
 import configurations
+import led_handle
+import main
 
 
 def update_thresholds(json_data=None):
@@ -10,6 +12,7 @@ def update_thresholds(json_data=None):
     if json_data is None:
         if not configurations.WLAN.isconnected():
             print("{}: No wifi connection".format(utime.time()))
+            led_handle.srv_led_on()
             return
 
         url = "{}getThresholds.php".format(configurations.API_ENDPOINT)
@@ -20,15 +23,20 @@ def update_thresholds(json_data=None):
             "token": configurations.TOKEN
         })
         print("{}: Downloading threshold data".format(utime.time()))
-        json_data = ujson.loads(urequests.post(url, headers=headers, data=data).text)
-
+        try:
+            json_data = ujson.loads(urequests.post(url, headers=headers, data=data).text)
+        except OSError as err:
+            print("{}: An error occurred".format(utime.time()))
+            led_handle.srv_led_on()
     if not sorted(get_thresholds().items()) == sorted(json_data.items()):
         print("{}: Writing threshold update".format(utime.time()))
         thresholds_obj = uio.open("thresholds.json", "w")
         ujson.dump(json_data, thresholds_obj)
         thresholds_obj.close()
+        led_handle.srv_led_off()
     else:
         print("{}: No threshold update necessary".format(utime.time()))
+        led_handle.srv_led_off()
 
 
 def get_thresholds():

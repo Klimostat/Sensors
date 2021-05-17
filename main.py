@@ -41,6 +41,7 @@ def main():
                 urequests.post(url, headers=headers, data=data)
             except OSError as err:
                 print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+                led_handle.srv_led_on()
             gc.collect()
             utime.sleep(8)
 
@@ -51,6 +52,11 @@ def main():
         except OSError as err:
             print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
             continue
+
+        if not configurations.WLAN.isconnected():
+            led_handle.srv_led_on()
+            continue
+        led_handle.srv_led_off()
 
         url = "{}receive.php".format(configurations.API_ENDPOINT)
         data = "data=" + ujson.dumps({
@@ -67,13 +73,15 @@ def main():
             thresholds.update_thresholds(thresholds_obj)
         except ValueError as err:
             print("{}: JSON parsen fehlgeschlagen".format(utime.time()))
-
+            led_handle.srv_led_on()
         except OSError as err:
             if err.args[0] == uerrno.ECONNRESET:
                 # TODO: Serververbindung fehlgeschlagen
                 print("{}: Serververbindung fehlgeschlagen".format(utime.time()))
+                led_handle.srv_led_on()
             else:
                 print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+                led_handle.srv_led_off()
 
         gc.collect()
         utime.sleep(last_time + configurations.INTERVAL - utime.time())
