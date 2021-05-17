@@ -1,0 +1,8 @@
+GPIO_21 = SDA
+GPIO_22 = SLC
+
+LEDs:
+GPIO_32 = srv
+GPIO_33 = temp
+GPIO_34 = CO2
+GPIO_25 = relH
