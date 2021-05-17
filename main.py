@@ -12,6 +12,7 @@ from scd30 import SCD30
 
 
 def main():
+    led_handle.srv_led_on()
     wifi_connect.connect()
     thresholds.update_thresholds()
 
@@ -75,15 +76,34 @@ def main():
             led_handle.srv_led_on()
         except OSError as err:
             if err.args[0] == uerrno.ECONNRESET:
-                # TODO: Serververbindung fehlgeschlagen
                 print("{}: Serververbindung fehlgeschlagen".format(utime.time()))
                 led_handle.srv_led_on()
             else:
                 print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
                 led_handle.srv_led_off()
 
+        check_thresholds(co2, temp, relh)
         gc.collect()
         utime.sleep(last_time + configurations.INTERVAL - utime.time())
+
+
+def check_thresholds(co2, temp, relh):
+    thresh = thresholds.get_thresholds()
+
+    if co2 >= thresh["co2"]:
+        led_handle.co2_led_on()
+    else:
+        led_handle.co2_led_off()
+
+    if temp >= thresh["temp"]:
+        led_handle.temp_led_on()
+    else:
+        led_handle.temp_led_off()
+
+    if temp >= thresh["relh"]:
+        led_handle.relh_led_on()
+    else:
+        led_handle.relh_led_off()
 
 
 if __name__ == "__main__":

@@ -6,6 +6,13 @@ LED_SRV, LED_TEMP, LED_CO2, LED_RELH = Pin(32, Pin.OUT), \
                                        Pin(35, Pin.OUT)
 
 
+def init():
+    srv_led_off()
+    co2_led_off()
+    temp_led_off()
+    relh_led_off()
+
+
 # SRV LED
 def srv_led_on():
     LED_SRV.value(1)

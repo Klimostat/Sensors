@@ -25,5 +25,4 @@ def connect():
         led_handle.srv_led_off()
     else:
         print("{}: WIFI Connection could not be formed".format(utime.time()))
-        led_handle.srv_led_off()
 
