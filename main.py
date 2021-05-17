@@ -33,8 +33,7 @@ def main():
             url = "{}ping.php".format(configurations.API_ENDPOINT)
             data = "data=" + ujson.dumps({
                 "id": configurations.STATION_ID,
-                "token": configurations.TOKEN,
-                "msg": "sensor_not_ready"
+                "token": configurations.TOKEN
             })
 
             try:
