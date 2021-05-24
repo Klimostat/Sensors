@@ -12,6 +12,15 @@ from scd30 import SCD30
 
 
 def main():
+    # led blink
+    led_handler.all_on()
+    utime.sleep_ms(500)
+    led_handler.all_off()
+    utime.sleep_ms(500)
+    led_handler.all_on()
+    utime.sleep_ms(500)
+    led_handler.all_off()
+
     led_handler.srv_led_on()
     wifi_connect.connect()
     thresholds.update_thresholds()
