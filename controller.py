@@ -6,13 +6,13 @@ import ujson
 import urequests
 import uerrno
 import gc
-import led_handle
+import led_handler
 from machine import Pin, SoftI2C
 from scd30 import SCD30
 
 
 def main():
-    led_handle.srv_led_on()
+    led_handler.srv_led_on()
     wifi_connect.connect()
     thresholds.update_thresholds()
 
@@ -41,7 +41,7 @@ def main():
                 urequests.post(url, headers=headers, data=data)
             except OSError as err:
                 print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
-                led_handle.srv_led_on()
+                led_handler.srv_led_on()
             gc.collect()
             utime.sleep(8)
 
@@ -54,9 +54,9 @@ def main():
             continue
 
         if not configurations.WLAN.isconnected():
-            led_handle.srv_led_on()
+            led_handler.srv_led_on()
             continue
-        led_handle.srv_led_off()
+        led_handler.srv_led_off()
 
         url = "{}receive.php".format(configurations.API_ENDPOINT)
         data = "data=" + ujson.dumps({
@@ -73,14 +73,14 @@ def main():
             thresholds.update_thresholds(thresholds_obj)
         except ValueError as err:
             print("{}: JSON parsen fehlgeschlagen".format(utime.time()))
-            led_handle.srv_led_on()
+            led_handler.srv_led_on()
         except OSError as err:
             if err.args[0] == uerrno.ECONNRESET:
                 print("{}: Serververbindung fehlgeschlagen".format(utime.time()))
-                led_handle.srv_led_on()
+                led_handler.srv_led_on()
             else:
                 print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
-                led_handle.srv_led_off()
+                led_handler.srv_led_off()
 
         check_thresholds(co2, temp, relh)
         gc.collect()
@@ -91,16 +91,16 @@ def check_thresholds(co2, temp, relh):
     thresh = thresholds.get_thresholds()
 
     if co2 >= thresh["co2"]:
-        led_handle.co2_led_on()
+        led_handler.co2_led_on()
     else:
-        led_handle.co2_led_off()
+        led_handler.co2_led_off()
 
     if temp >= thresh["temp"]:
-        led_handle.temp_led_on()
+        led_handler.temp_led_on()
     else:
-        led_handle.temp_led_off()
+        led_handler.temp_led_off()
 
     if temp >= thresh["relh"]:
-        led_handle.relh_led_on()
+        led_handler.relh_led_on()
     else:
-        led_handle.relh_led_off()
+        led_handler.relh_led_off()

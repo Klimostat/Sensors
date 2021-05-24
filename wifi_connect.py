@@ -1,7 +1,7 @@
 import network
 import utime
 import configurations
-import led_handle
+import led_handler
 
 
 def connect():
@@ -22,7 +22,7 @@ def connect():
     if configurations.WLAN.isconnected():
         print("{}: WIFI Connection successful".format(utime.time()))
         print(configurations.WLAN.ifconfig())
-        led_handle.srv_led_off()
+        led_handler.srv_led_off()
     else:
         print("{}: WIFI Connection could not be formed".format(utime.time()))
 
