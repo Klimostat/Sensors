@@ -4,7 +4,6 @@ import uio
 import utime
 import configurations
 import led_handle
-import main
 
 
 def update_thresholds(json_data=None):
