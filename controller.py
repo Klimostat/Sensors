@@ -104,12 +104,12 @@ def check_thresholds(co2, temp, relh):
     else:
         led_handler.co2_led_off()
 
-    if str(temp) >= thresh["temp"]:
+    if str(temp) >= thresh["temperature"]:
         led_handler.temp_led_on()
     else:
         led_handler.temp_led_off()
 
-    if str(relh) >= thresh["relh"]:
+    if str(relh) >= thresh["humidity"]:
         led_handler.relh_led_on()
     else:
         led_handler.relh_led_off()
