@@ -2,6 +2,7 @@ import urequests
 import ujson
 import uio
 import utime
+import uerrno
 import configurations
 import led_handler
 
@@ -25,7 +26,7 @@ def update_thresholds(json_data=None):
         try:
             json_data = ujson.loads(urequests.post(url, headers=headers, data=data).text)
         except OSError as err:
-            print("{}: An error occurred".format(utime.time()))
+            print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
             led_handler.srv_led_on()
     if not sorted(get_thresholds().items()) == sorted(json_data.items()):
         print("{}: Writing threshold update".format(utime.time()))
