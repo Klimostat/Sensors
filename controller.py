@@ -32,6 +32,7 @@ def main():
 
     while True:
         while True:
+            last_time = utime.time()
             try:
                 sensor_status = scd30.get_status_ready()
                 wifi_status = configurations.WLAN.isconnected()
@@ -61,7 +62,7 @@ def main():
 
             led_handler.srv_led_on()
             gc.collect()
-            utime.sleep(8)
+            utime.sleep(last_time + configurations.INTERVAL - utime.time())
 
         last_time = utime.time()
 
