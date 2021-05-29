@@ -1,3 +1,5 @@
+set -x
+
 mpy-cross -march=xtensawin controller.py
 mpy-cross -march=xtensawin led_handler.py
 mpy-cross -march=xtensawin thresholds.py
