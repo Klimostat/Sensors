@@ -99,17 +99,17 @@ def main():
 def check_thresholds(co2, temp, relh):
     thresh = thresholds.get_thresholds()
 
-    if co2 >= thresh["co2"]:
+    if str(co2) >= thresh["co2"]:
         led_handler.co2_led_on()
     else:
         led_handler.co2_led_off()
 
-    if temp >= thresh["temp"]:
+    if str(temp) >= thresh["temp"]:
         led_handler.temp_led_on()
     else:
         led_handler.temp_led_off()
 
-    if relh >= thresh["relh"]:
+    if str(relh) >= thresh["relh"]:
         led_handler.relh_led_on()
     else:
         led_handler.relh_led_off()
