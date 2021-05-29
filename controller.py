@@ -33,12 +33,17 @@ def main():
     while True:
         while True:
             try:
-                if not scd30.get_status_ready() != 1:
+                sensor_status = scd30.get_status_ready()
+                wifi_status = configurations.WLAN.isconnected()
+                if sensor_status == 1 and wifi_status:
                     break
+                if sensor_status != 1:
+                    print("{}: Sensor not ready".format(utime.time()))
+                if wifi_status != 1:
+                    print("{}: WIFI not ready".format(utime.time()))
             except OSError as err:
                 print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
-
-            print("{}: Sensor not ready".format(utime.time()))
+                print("{}: Sensor or WIFI not ready".format(utime.time()))
 
             url = "{}ping.php".format(configurations.API_ENDPOINT)
             data = "data=" + ujson.dumps({
@@ -49,8 +54,12 @@ def main():
             try:
                 urequests.post(url, headers=headers, data=data)
             except OSError as err:
-                print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
-                led_handler.srv_led_on()
+                if err.args[0] in uerrno.errorcode.keys():
+                    print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+                else:
+                    print("{}: An error occurred: {}".format(utime.time(), err.args[0]))
+
+            led_handler.srv_led_on()
             gc.collect()
             utime.sleep(8)
 
@@ -62,11 +71,6 @@ def main():
             print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
             continue
 
-        if not configurations.WLAN.isconnected():
-            led_handler.srv_led_on()
-            continue
-        led_handler.srv_led_off()
-
         url = "{}receive.php".format(configurations.API_ENDPOINT)
         data = "data=" + ujson.dumps({
             "id": configurations.STATION_ID,
@@ -75,21 +79,20 @@ def main():
             "temp": temp,
             "relh": relh
         })
-        print(data)
+        print("Sensor reading: {}".format(data))
         try:
             print("{}: Sending data to server".format(utime.time()))
             thresholds_obj = ujson.loads(urequests.post(url, headers=headers, data=data).text)
             thresholds.update_thresholds(thresholds_obj)
-        except ValueError as err:
+
+            led_handler.srv_led_off()
+
+        except ValueError:
             print("{}: JSON parsen fehlgeschlagen".format(utime.time()))
             led_handler.srv_led_on()
         except OSError as err:
-            if err.args[0] == uerrno.ECONNRESET:
-                print("{}: Serververbindung fehlgeschlagen".format(utime.time()))
-                led_handler.srv_led_on()
-            else:
-                print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
-                led_handler.srv_led_off()
+            print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+            led_handler.srv_led_on()
 
         thresholds.check_thresholds(co2, temp, relh)
         gc.collect()

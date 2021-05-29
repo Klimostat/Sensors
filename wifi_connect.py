@@ -9,7 +9,7 @@ def connect():
 
     if configurations.WLAN.isconnected():
         print("{}: WIFI Already connected".format(utime.time()))
-        return
+        return True
 
     configurations.WLAN.active(True)
     configurations.WLAN.connect(configurations.WIFI_SSID, configurations.WIFI_PASSWD)
@@ -22,7 +22,8 @@ def connect():
     if configurations.WLAN.isconnected():
         print("{}: WIFI Connection successful".format(utime.time()))
         print(configurations.WLAN.ifconfig())
-        led_handler.srv_led_off()
+        return True
     else:
         print("{}: WIFI Connection could not be formed".format(utime.time()))
+    return False
 

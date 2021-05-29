@@ -32,10 +32,8 @@ def update_thresholds(json_data=None):
         thresholds_obj = uio.open("thresholds.json", "w")
         ujson.dump(json_data, thresholds_obj)
         thresholds_obj.close()
-        led_handler.srv_led_off()
     else:
         print("{}: No threshold update necessary".format(utime.time()))
-        led_handler.srv_led_off()
 
 
 def get_thresholds():
