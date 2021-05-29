@@ -42,7 +42,7 @@ def main():
                     print("{}: Sensor not ready".format(utime.time()))
                 if wifi_status != 1:
                     print("{}: WIFI not ready".format(utime.time()))
-            except OSError as err:
+            except Exception as err:
                 print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
                 print("{}: Sensor or WIFI not ready".format(utime.time()))
 
@@ -54,7 +54,7 @@ def main():
 
             try:
                 urequests.post(url, headers=headers, data=data)
-            except OSError as err:
+            except Exception as err:
                 if err.args[0] in uerrno.errorcode.keys():
                     print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
                 else:
@@ -70,7 +70,7 @@ def main():
 
         try:
             co2, temp, relh = scd30.read_measurement()
-        except OSError as err:
+        except Exception as err:
             print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
             continue
 
@@ -89,15 +89,12 @@ def main():
             thresholds.update_thresholds(thresholds_obj)
 
             led_handler.srv_led_off()
+            thresholds.check_thresholds(co2, temp, relh)
 
-        except ValueError:
-            print("{}: failed parsing JSON".format(utime.time()))
-            led_handler.srv_led_on()
-        except OSError as err:
+        except Exception as err:
             print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
             led_handler.srv_led_on()
 
-        thresholds.check_thresholds(co2, temp, relh)
         gc.collect()
         time_diff = last_time + configurations.INTERVAL - utime.time()
         if time_diff > 1:
