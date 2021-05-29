@@ -89,7 +89,7 @@ def main():
             led_handler.srv_led_off()
 
         except ValueError:
-            print("{}: JSON parsen fehlgeschlagen".format(utime.time()))
+            print("{}: failed parsing JSON".format(utime.time()))
             led_handler.srv_led_on()
         except OSError as err:
             print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
