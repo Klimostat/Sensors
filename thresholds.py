@@ -43,3 +43,28 @@ def get_thresholds():
     json_data = ujson.load(thresholds_obj)
     thresholds_obj.close()
     return json_data
+
+
+def check_thresholds(co2, temp, relh):
+    thresh = get_thresholds()
+
+    if str(co2) >= thresh["co2"]:
+        print("Turned co2 led on")
+        led_handler.co2_led_on()
+    else:
+        print("Turned co2 led off")
+        led_handler.co2_led_off()
+
+    if str(temp) >= thresh["temperature"]:
+        led_handler.temp_led_on()
+        print("Turned temp led on")
+    else:
+        led_handler.temp_led_off()
+        print("Turned temp led off")
+
+    if str(relh) >= thresh["humidity"]:
+        led_handler.relh_led_on()
+        print("Turned relh led on")
+    else:
+        led_handler.relh_led_off()
+        print("Turned relh led off")

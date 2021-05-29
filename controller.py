@@ -91,25 +91,6 @@ def main():
                 print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
                 led_handler.srv_led_off()
 
-        check_thresholds(co2, temp, relh)
+        thresholds.check_thresholds(co2, temp, relh)
         gc.collect()
         utime.sleep(last_time + configurations.INTERVAL - utime.time())
-
-
-def check_thresholds(co2, temp, relh):
-    thresh = thresholds.get_thresholds()
-
-    if str(co2) >= thresh["co2"]:
-        led_handler.co2_led_on()
-    else:
-        led_handler.co2_led_off()
-
-    if str(temp) >= thresh["temperature"]:
-        led_handler.temp_led_on()
-    else:
-        led_handler.temp_led_off()
-
-    if str(relh) >= thresh["humidity"]:
-        led_handler.relh_led_on()
-    else:
-        led_handler.relh_led_off()
