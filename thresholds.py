@@ -25,9 +25,11 @@ def update_thresholds(json_data=None):
         print("{}: Downloading threshold data".format(utime.time()))
         try:
             json_data = ujson.loads(urequests.post(url, headers=headers, data=data).text)
-        except OSError as err:
+        except:
             print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
             led_handler.srv_led_on()
+            return
+
     if not sorted(get_thresholds().items()) == sorted(json_data.items()):
         print("{}: Writing threshold update".format(utime.time()))
         thresholds_obj = uio.open("thresholds.json", "w")
