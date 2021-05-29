@@ -62,6 +62,8 @@ def main():
 
             led_handler.srv_led_on()
             gc.collect()
+        time_diff = last_time + configurations.INTERVAL - utime.time()
+        if time_diff > 1:
             utime.sleep(last_time + configurations.INTERVAL - utime.time())
 
         last_time = utime.time()
@@ -97,4 +99,6 @@ def main():
 
         thresholds.check_thresholds(co2, temp, relh)
         gc.collect()
-        utime.sleep(last_time + configurations.INTERVAL - utime.time())
+        time_diff = last_time + configurations.INTERVAL - utime.time()
+        if time_diff > 1:
+            utime.sleep(last_time + configurations.INTERVAL - utime.time())
