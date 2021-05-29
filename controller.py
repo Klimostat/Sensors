@@ -62,9 +62,9 @@ def main():
 
             led_handler.srv_led_on()
             gc.collect()
-        time_diff = last_time + configurations.INTERVAL - utime.time()
-        if time_diff > 1:
-            utime.sleep(time_diff)
+            time_diff = last_time + configurations.INTERVAL - utime.time()
+            if time_diff > 1:
+                utime.sleep(time_diff)
 
         last_time = utime.time()
 
