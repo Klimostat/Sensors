@@ -1,7 +1,6 @@
 import network
 import utime
 import configurations
-import led_handler
 
 
 def connect():
