@@ -42,8 +42,7 @@ def main():
                     print("{}: Sensor not ready".format(utime.time()))
                 if wifi_status != 1:
                     print("{}: WIFI not ready".format(utime.time()))
-            except Exception as err:
-                print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+            except Exception:
                 print("{}: Sensor or WIFI not ready".format(utime.time()))
 
             url = "{}ping.php".format(configurations.API_ENDPOINT)
@@ -55,10 +54,7 @@ def main():
             try:
                 urequests.post(url, headers=headers, data=data)
             except Exception as err:
-                if err.args[0] in uerrno.errorcode.keys():
-                    print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
-                else:
-                    print("{}: An error occurred: {}".format(utime.time(), err.args[0]))
+                handle_exception(err)
 
             led_handler.srv_led_on()
             gc.collect()
@@ -71,7 +67,7 @@ def main():
         try:
             co2, temp, relh = scd30.read_measurement()
         except Exception as err:
-            print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+            handle_exception(err)
             continue
 
         url = "{}receive.php".format(configurations.API_ENDPOINT)
@@ -92,10 +88,17 @@ def main():
             thresholds.check_thresholds(co2, temp, relh)
 
         except Exception as err:
-            print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+            handle_exception(err)
             led_handler.srv_led_on()
 
         gc.collect()
         time_diff = last_time + configurations.INTERVAL - utime.time()
         if time_diff > 1:
             utime.sleep(time_diff)
+
+
+def handle_exception(err):
+    if err.args[0] in uerrno.errorcode.keys():
+        print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+    else:
+        print("{}: An error occurred: {}".format(utime.time(), err.args[0]))

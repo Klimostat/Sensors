@@ -2,8 +2,8 @@ import urequests
 import ujson
 import uio
 import utime
-import uerrno
 import configurations
+import controller
 import led_handler
 
 
@@ -25,8 +25,8 @@ def update_thresholds(json_data=None):
         print("{}: Downloading threshold data".format(utime.time()))
         try:
             json_data = ujson.loads(urequests.post(url, headers=headers, data=data).text)
-        except Exception:
-            print("{}: An error occurred: {}".format(utime.time(), uerrno.errorcode[err.args[0]]))
+        except Exception as err:
+            controller.handle_exception(err)
             led_handler.srv_led_on()
             return
 
