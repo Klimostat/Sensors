@@ -25,8 +25,6 @@ def main():
     wifi_connect.connect()
     thresholds.update_thresholds()
 
-    headers = {"content-type": "application/x-www-form-urlencoded"}
-
     i2c = SoftI2C(scl=Pin(22), sda=Pin(21))
     scd30 = SCD30(i2c, addr=0x61)
 
@@ -47,7 +45,7 @@ def main():
                 })
 
                 try:
-                    urequests.post(url, headers=headers, data=data)
+                    urequests.post(url, headers=configurations.headers, data=data)
                 except Exception as err:
                     handle_exception(err)
 
@@ -76,7 +74,7 @@ def main():
                 })
 
                 print("{}: Sending data to server".format(utime.time()))
-                thresholds_obj = ujson.loads(urequests.post(url, headers=headers, data=data).text)
+                thresholds_obj = ujson.loads(urequests.post(url, headers=configurations.headers, data=data).text)
                 thresholds.update_thresholds(thresholds_obj)
 
                 led_handler.srv_led_off()

@@ -16,7 +16,6 @@ def update_thresholds(json_data=None):
             return
 
         url = "{}getThresholds.php".format(configurations.API_ENDPOINT)
-        headers = {"content-type": "application/x-www-form-urlencoded"}
 
         data = "data=" + ujson.dumps({
             "id": configurations.STATION_ID,
@@ -24,7 +23,7 @@ def update_thresholds(json_data=None):
         })
         print("{}: Downloading threshold data".format(utime.time()))
         try:
-            json_data = ujson.loads(urequests.post(url, headers=headers, data=data).text)
+            json_data = ujson.loads(urequests.post(url, headers=configurations.headers, data=data).text)
         except Exception as err:
             controller.handle_exception(err)
             led_handler.srv_led_on()
