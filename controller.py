@@ -23,6 +23,7 @@ def main():
 
     led_handler.srv_led_on()
     wifi_connect.connect()
+    thresholds.update_thresholds()
 
     headers = {"content-type": "application/x-www-form-urlencoded"}
 
