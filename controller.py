@@ -35,7 +35,8 @@ def main():
                 if scd30.get_status_ready() == 1:
                     break
             except Exception:
-                print("{}: Sensor not ready".format(utime.time()))
+                pass
+            print("{}: Sensor not ready".format(utime.time()))
 
             if configurations.WLAN.isconnected():
                 url = "{}ping.php".format(configurations.API_ENDPOINT)
