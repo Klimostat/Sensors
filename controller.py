@@ -60,12 +60,12 @@ def main():
 
         try:
             co2, temp, relh = scd30.read_measurement()
+
+            thresholds.check_thresholds(co2, temp, relh)
+            print("Sensor reading: {}".format(ujson.dumps({"co2": co2, "temp": temp, "relh": relh})))
         except Exception as err:
             handle_exception(err)
             led_handler.srv_led_on()
-
-        thresholds.check_thresholds(co2, temp, relh)
-        print("Sensor reading: {}".format(ujson.dumps({"co2": co2, "temp": temp, "relh": relh})))
 
         if configurations.WLAN.isconnected():
             url = "{}receive.php".format(configurations.API_ENDPOINT)
