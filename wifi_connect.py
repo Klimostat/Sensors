@@ -1,6 +1,7 @@
 import network
 import utime
 import configurations
+import led_handler
 
 
 def connect():
@@ -24,5 +25,5 @@ def connect():
         return True
     else:
         print("{}: WIFI Connection could not be formed".format(utime.time()))
+    led_handler.srv_led_on()
     return False
-

@@ -64,29 +64,29 @@ def main():
 
             thresholds.check_thresholds(co2, temp, relh)
             print("Sensor reading: {}".format(ujson.dumps({"co2": co2, "temp": temp, "relh": relh})))
-        except Exception as err:
-            handle_exception(err)
-            led_handler.srv_led_on()
 
-        if configurations.WLAN.isconnected():
-            url = "{}receive.php".format(configurations.API_ENDPOINT)
-            data = "data=" + ujson.dumps({
-                "id": configurations.STATION_ID,
-                "token": configurations.TOKEN,
-                "co2": co2,
-                "temp": temp,
-                "relh": relh
-            })
-            try:
+            if configurations.WLAN.isconnected():
+                url = "{}receive.php".format(configurations.API_ENDPOINT)
+                data = "data=" + ujson.dumps({
+                    "id": configurations.STATION_ID,
+                    "token": configurations.TOKEN,
+                    "co2": co2,
+                    "temp": temp,
+                    "relh": relh
+                })
+
                 print("{}: Sending data to server".format(utime.time()))
                 thresholds_obj = ujson.loads(urequests.post(url, headers=headers, data=data).text)
                 thresholds.update_thresholds(thresholds_obj)
 
                 led_handler.srv_led_off()
 
-            except Exception as err:
-                handle_exception(err)
+            else:
                 led_handler.srv_led_on()
+
+        except Exception as err:
+            handle_exception(err)
+            led_handler.srv_led_on()
 
         gc.collect()
         time_diff = last_time + configurations.INTERVAL - utime.time()
