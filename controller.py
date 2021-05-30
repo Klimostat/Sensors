@@ -45,7 +45,7 @@ def main():
                 })
 
                 try:
-                    urequests.post(url, headers=configurations.headers, data=data)
+                    urequests.post(url, headers=configurations.HEADERS, data=data)
                 except Exception as err:
                     handle_exception(err)
 
@@ -74,7 +74,7 @@ def main():
                 })
 
                 print("{}: Sending data to server".format(utime.time()))
-                thresholds_obj = ujson.loads(urequests.post(url, headers=configurations.headers, data=data).text)
+                thresholds_obj = ujson.loads(urequests.post(url, headers=configurations.HEADERS, data=data).text)
                 thresholds.update_thresholds(thresholds_obj)
 
                 led_handler.srv_led_off()

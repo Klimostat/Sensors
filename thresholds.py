@@ -23,7 +23,7 @@ def update_thresholds(json_data=None):
         })
         print("{}: Downloading threshold data".format(utime.time()))
         try:
-            json_data = ujson.loads(urequests.post(url, headers=configurations.headers, data=data).text)
+            json_data = ujson.loads(urequests.post(url, headers=configurations.HEADERS, data=data).text)
         except Exception as err:
             controller.handle_exception(err)
             led_handler.srv_led_on()
