@@ -1,15 +1,11 @@
 from machine import Pin
 
-LED_SRV, LED_TEMP, LED_CO2, LED_RELH = Pin(32, Pin.OUT), \
-                                       Pin(33, Pin.OUT), \
-                                       Pin(26, Pin.OUT), \
-                                       Pin(27, Pin.OUT)
+LED_SRV, LED_CO2, LED_RELH = Pin(32, Pin.OUT), Pin(26, Pin.OUT), Pin(27, Pin.OUT)
 
 
 def init():
     srv_led_off()
     co2_led_off()
-    temp_led_off()
     relh_led_off()
 
 
@@ -24,19 +20,6 @@ def srv_led_off():
 
 def srv_led_get_state():
     return LED_SRV.value()
-
-
-# TEMP LED
-def temp_led_on():
-    LED_TEMP.value(1)
-
-
-def temp_led_off():
-    LED_TEMP.value(0)
-
-
-def temp_led_get_state():
-    return LED_TEMP.value()
 
 
 # CO2 LED
@@ -69,11 +52,9 @@ def all_on():
     srv_led_on()
     co2_led_on()
     relh_led_on()
-    temp_led_on()
 
 
 def all_off():
     srv_led_off()
     co2_led_off()
     relh_led_off()
-    temp_led_off()

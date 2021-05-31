@@ -55,14 +55,7 @@ def check_thresholds(co2, temp, relh):
         print("Turned co2 led off")
         led_handler.co2_led_off()
 
-    if temp >= float(thresh["temperature"]):
-        led_handler.temp_led_on()
-        print("Turned temp led on")
-    else:
-        led_handler.temp_led_off()
-        print("Turned temp led off")
-
-    if relh >= float(thresh["humidity"]):
+    if relh <= float(thresh["humidity"]):
         led_handler.relh_led_on()
         print("Turned relh led on")
     else:
