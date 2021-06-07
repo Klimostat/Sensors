@@ -45,7 +45,7 @@ def get_thresholds():
     return json_data
 
 
-def check_thresholds(co2, temp, relh):
+def check_thresholds(co2, relh):
     thresh = get_thresholds()
 
     if co2 >= float(thresh["co2"]):

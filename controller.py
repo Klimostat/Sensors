@@ -52,7 +52,7 @@ def main():
         try:
             co2, temp, relh = scd30.read_measurement()
 
-            thresholds.check_thresholds(co2, temp, relh)
+            thresholds.check_thresholds(co2, relh)
             print("Sensor reading: {}".format(ujson.dumps({"co2": co2, "temp": temp, "relh": relh})))
 
             if configurations.WLAN.isconnected():
