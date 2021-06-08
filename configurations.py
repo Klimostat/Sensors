@@ -6,5 +6,5 @@ WIFI_SSID = "HTLW3R_WLAN"
 WIFI_PASSWD = "HTLW3R_WLAN"
 WLAN = None
 
-API_ENDPOINT = "https://home.letusflow.at/api/"
+API_ENDPOINT = "https://kls.letusflow.xyz/api/"
 HEADERS = {"content-type": "application/x-www-form-urlencoded"}
