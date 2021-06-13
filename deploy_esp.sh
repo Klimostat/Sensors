@@ -8,13 +8,3 @@ set -x
 ampy -p /dev/ttyUSB0 put main.py
 ampy -p /dev/ttyUSB0 put thresholds.json
 ampy -p /dev/ttyUSB0 put configurations.py
-
-# picocom /dev/ttyUSB0 -b115200
-: <<'END'
-import wifi_connect
-wifi_connect.connect()
-import upip
-upip.install("micropython-scd30")
-upip.install("micropython-urequests")
-Ctrl+D
-END
