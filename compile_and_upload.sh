@@ -11,6 +11,7 @@ ampy -p /dev/ttyUSB0 put controller.mpy
 ampy -p /dev/ttyUSB0 put led_handler.mpy
 ampy -p /dev/ttyUSB0 put thresholds.mpy
 ampy -p /dev/ttyUSB0 put wifi_connect.mpy
+ampy -p /dev/ttyUSB0 put urequests.py
 ampy -p /dev/ttyUSB0 put scd30.py
 
 rm *.mpy
