@@ -1,2 +1,0 @@
-micropython-scd30
-micropython-urequests
